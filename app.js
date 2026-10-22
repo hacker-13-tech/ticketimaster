@@ -1,0 +1,6 @@
+document.addEventListener('DOMContentLoaded',()=>{
+ const qty=document.getElementById('quantity'), unit=document.getElementById('unit-price'), total=document.getElementById('total-price'), label=document.getElementById('quantity-label');
+ function updateTotal(){if(!qty||!unit||!total)return;const n=parseInt(qty.value||'1',10);const p=Number(unit.dataset.price||0);if(label)label.textContent=String(n);total.textContent=new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n*p)}
+ if(qty)qty.addEventListener('change',updateTotal);updateTotal();
+ const form=document.getElementById('validate-form');if(form)form.addEventListener('submit',async e=>{e.preventDefault();const result=document.getElementById('validate-result');result.textContent='Checking…';try{const res=await fetch('/ticket/validate',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams(new FormData(form))});const data=await res.json();result.textContent=data.message+(data.event?' — '+data.event:'');result.className='validation-result '+(data.ok?'success':'failure')}catch(err){result.textContent='Could not validate ticket. Try again.';result.className='validation-result failure'}});
+});

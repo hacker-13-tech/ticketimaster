@@ -1,0 +1,11 @@
+services:
+  ticketimaster:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file: .env
+    volumes:
+      - ticketimaster_data:/data
+    restart: unless-stopped
+volumes:
+  ticketimaster_data:
